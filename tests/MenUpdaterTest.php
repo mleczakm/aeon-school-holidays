@@ -24,6 +24,7 @@ use Psr\Http\Message\ResponseInterface;
 
 #[CoversClass(CalendarIndexParser::class)]
 #[CoversClass(HtmlTextExtractor::class)]
+#[CoversClass(MenPageFetcher::class)]
 #[CoversClass(CandidateSelector::class)]
 #[CoversClass(WinterScheduleExtractor::class)]
 #[CoversClass(WinterScheduleDataset::class)]

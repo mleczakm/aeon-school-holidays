@@ -10,7 +10,7 @@ The Ministry of Education publishes the school-year calendar and the winter-brea
 - [2022/2023 winter break](https://www.gov.pl/web/edukacja/bezpieczne-ferie-zimowe-2023)
 - [2023/2024 winter break](https://www.gov.pl/web/edukacja/terminy-ferii-zimowych-w-roku-szkolnym-20232024)
 - [2024/2025 winter break](https://www.gov.pl/web/edukacja/terminy-ferii-zimowych-w-roku-szkolnym-20242025)
-- [2025/2026 winter break](https://www.gov.pl/web/edukacja/terminy-ferii-zimowych-w-roku-szkolnym-20252026.)
+- [2025/2026 winter break](https://www.gov.pl/web/edukacja/terminy-ferii-zimowych-w-roku-szkolnym-20252026)
 - [2026/2027 winter break](https://www.gov.pl/web/edukacja/terminy-ferii-zimowych-w-roku-szkolnym-20262027)
 - [2027/2028 winter break](https://www.gov.pl/web/edukacja/terminy-ferii-zimowych-w-roku-szkolnym-20272028)
 - [Consolidated Regulation of 11 August 2017](https://isap.sejm.gov.pl/isap.nsf/download.xsp/WDU20230001211/O/D20231211.pdf)

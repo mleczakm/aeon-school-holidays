@@ -84,6 +84,8 @@ For an unpublished or school-specific schedule, implement `WinterBreakSchedule` 
 
 ## Development
 
+The library itself targets PHP 8.3+, but the dev tooling (the MEN updater under `tools/`, its tests, `phpstan`, `php-cs-fixer`) requires PHP 8.4+ for `Dom\HTMLDocument`. `composer install` therefore needs PHP 8.4+; consumers installing only `require` dependencies are unaffected.
+
 ```bash
 composer install
 composer qa
