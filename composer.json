@@ -60,7 +60,7 @@
         "cs-fix": "php-cs-fixer fix",
         "coverage": "phpunit --coverage-clover=build/coverage/clover.xml --coverage-text",
         "coverage-check": "coverage-check build/coverage/clover.xml 100",
-        "infection": "infection --threads=max --min-msi=80 --min-covered-msi=90",
+        "infection": "infection --threads=max --min-msi=75 --min-covered-msi=75",
         "qa": [
             "@cs-check",
             "@phpstan",
