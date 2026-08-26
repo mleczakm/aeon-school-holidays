@@ -26,6 +26,7 @@
         "php": "^8.4",
         "ext-dom": "*",
         "ext-libxml": "*",
+        "esi/phpunit-coverage-check": "^3.0",
         "friendsofphp/php-cs-fixer": "^3.87",
         "guzzlehttp/guzzle": "^8.1",
         "phpstan/phpstan": "^2.1",
@@ -53,6 +54,8 @@
         "phpstan": "phpstan analyse",
         "cs-check": "php-cs-fixer fix --dry-run --diff",
         "cs-fix": "php-cs-fixer fix",
+        "coverage": "phpunit --coverage-clover=build/coverage/clover.xml --coverage-text",
+        "coverage-check": "coverage-check build/coverage/clover.xml 90",
         "qa": [
             "@cs-check",
             "@phpstan",
