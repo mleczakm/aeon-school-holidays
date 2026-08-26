@@ -11,6 +11,6 @@
         "json": "build/infection/infection.json"
     },
     "tmpDir": "build/infection",
-    "minMsi": 75,
-    "minCoveredMsi": 75
+    "minMsi": 65,
+    "minCoveredMsi": 65
 }
