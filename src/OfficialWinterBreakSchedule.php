@@ -41,12 +41,16 @@ final class OfficialWinterBreakSchedule implements WinterBreakSchedule
             }
         }
 
+        // @codeCoverageIgnoreStart
+        // Unreachable: loadSchedules() already rejects any school year that doesn't assign
+        // every voivodeship exactly once, so this loop always finds a match.
         throw new \LogicException(sprintf(
             'Winter break data for %s is incomplete in school year %d/%d.',
             $voivodeship->value,
             $schoolYearStart,
             $schoolYearStart + 1,
         ));
+        // @codeCoverageIgnoreEnd
     }
 
     /** @return list<int> */
@@ -62,7 +66,7 @@ final class OfficialWinterBreakSchedule implements WinterBreakSchedule
             return $this->schedules;
         }
 
-        $contents = file_get_contents($this->datasetPath);
+        $contents = @file_get_contents($this->datasetPath);
 
         if ($contents === false) {
             throw new \RuntimeException(sprintf('Unable to read Polish winter break dataset: %s.', $this->datasetPath));

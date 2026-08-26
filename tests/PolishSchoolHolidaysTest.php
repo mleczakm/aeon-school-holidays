@@ -81,6 +81,17 @@ final class PolishSchoolHolidaysTest extends TestCase
         self::assertSame('2025-12-31', $result[9]->day()->toString());
     }
 
+    public function testItReturnsNoHolidaysForAReversedPeriod(): void
+    {
+        $holidays = new PolishSchoolHolidays(Voivodeship::Masovian);
+        $result = $holidays->in(new TimePeriod(
+            DateTime::fromString('2026-01-02 12:00:00 UTC'),
+            DateTime::fromString('2025-12-20 12:00:00 UTC'),
+        ));
+
+        self::assertSame([], $result);
+    }
+
     public function testEverySupportedWinterBreakContainsFourteenAeonHolidays(): void
     {
         foreach (Voivodeship::cases() as $voivodeship) {

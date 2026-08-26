@@ -63,4 +63,118 @@ final class OfficialWinterBreakScheduleTest extends TestCase
 
         (new OfficialWinterBreakSchedule())->for(2028, Voivodeship::Masovian);
     }
+
+    public function testItRejectsAnUnreadableDatasetFile(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Unable to read Polish winter break dataset');
+
+        $path = sys_get_temp_dir() . '/missing-' . bin2hex(random_bytes(8)) . '.json';
+        (new OfficialWinterBreakSchedule($path))->supportedSchoolYears();
+    }
+
+    /** @param array<string, mixed> $decoded */
+    #[DataProvider('malformedDatasetProvider')]
+    public function testItRejectsAMalformedDataset(array $decoded, string $expectedMessage): void
+    {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage($expectedMessage);
+
+        (new OfficialWinterBreakSchedule($this->temporaryDataset($decoded)))->supportedSchoolYears();
+    }
+
+    /** @return iterable<string, array{array<string, mixed>, string}> */
+    public static function malformedDatasetProvider(): iterable
+    {
+        yield 'missing schema_version' => [
+            ['schedules' => self::baseSchedule()['schedules']],
+            'unsupported structure',
+        ];
+
+        yield 'schedules is not an array' => [
+            ['schema_version' => 1, 'schedules' => 'not-an-array'],
+            'unsupported structure',
+        ];
+
+        yield 'school-year entry is not an array' => [
+            ['schema_version' => 1, 'schedules' => ['2020' => 'not-an-array']],
+            'invalid school-year entry',
+        ];
+
+        yield 'school-year key is not numeric' => [
+            ['schema_version' => 1, 'schedules' => ['not-a-year' => ['periods' => []]]],
+            'invalid school-year entry',
+        ];
+
+        yield 'period missing start' => [
+            self::withMutatedPeriod(static function (array $period): array {
+                unset($period['start']);
+
+                return $period;
+            }),
+            'invalid winter period',
+        ];
+
+        yield 'period is not exactly fourteen days' => [
+            self::withMutatedPeriod(static fn(array $period): array => [...$period, 'end' => '2021-01-16']),
+            'outside the expected fourteen-day range',
+        ];
+
+        yield 'voivodeship code is not a string' => [
+            self::withMutatedPeriod(static fn(array $period): array => [...$period, 'voivodeships' => [2, ...array_slice($period['voivodeships'], 1)]]),
+            'invalid voivodeship code',
+        ];
+
+        yield 'voivodeship code repeats within a school year' => [
+            self::withMutatedPeriod(static fn(array $period): array => [...$period, 'voivodeships' => ['PL-02', 'PL-02', ...array_slice($period['voivodeships'], 2)]]),
+            'occurs more than once',
+        ];
+
+        yield 'a voivodeship is never assigned' => [
+            self::withMutatedPeriod(static fn(array $period): array => [...$period, 'voivodeships' => array_slice($period['voivodeships'], 1)]),
+            'does not assign every Polish voivodeship exactly once',
+        ];
+    }
+
+    /** @return array{schema_version: int, schedules: array{'2020': array{periods: list<array{start: string, end: string, voivodeships: list<string>}>}}} */
+    private static function baseSchedule(): array
+    {
+        return [
+            'schema_version' => 1,
+            'schedules' => [
+                '2020' => [
+                    'periods' => [
+                        [
+                            'start' => '2021-01-04',
+                            'end' => '2021-01-17',
+                            'voivodeships' => array_map(static fn(Voivodeship $voivodeship): string => $voivodeship->value, Voivodeship::cases()),
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @param callable(array{start: string, end: string, voivodeships: list<string>}): array<string, mixed> $mutate
+     * @return array<string, mixed>
+     */
+    private static function withMutatedPeriod(callable $mutate): array
+    {
+        $decoded = self::baseSchedule();
+        $period = $decoded['schedules']['2020']['periods'][0];
+        $decoded['schedules']['2020']['periods'][0] = $mutate($period);
+
+        return $decoded;
+    }
+
+    /** @param array<string, mixed> $decoded */
+    private function temporaryDataset(array $decoded): string
+    {
+        $path = tempnam(sys_get_temp_dir(), 'winter-breaks-');
+        self::assertIsString($path);
+        self::assertNotFalse(file_put_contents($path, json_encode($decoded, JSON_THROW_ON_ERROR)));
+
+        return $path;
+    }
 }

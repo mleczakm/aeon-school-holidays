@@ -59,7 +59,7 @@
         "cs-check": "php-cs-fixer fix --dry-run --diff",
         "cs-fix": "php-cs-fixer fix",
         "coverage": "phpunit --coverage-clover=build/coverage/clover.xml --coverage-text",
-        "coverage-check": "coverage-check build/coverage/clover.xml 90",
+        "coverage-check": "coverage-check build/coverage/clover.xml 100",
         "infection": "infection --threads=max --min-msi=80 --min-covered-msi=90",
         "qa": [
             "@cs-check",

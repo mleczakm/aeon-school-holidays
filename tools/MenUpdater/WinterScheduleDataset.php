@@ -11,7 +11,7 @@ final class WinterScheduleDataset
 
     public function __construct(private readonly string $path)
     {
-        $contents = file_get_contents($path);
+        $contents = @file_get_contents($path);
 
         if ($contents === false) {
             throw new \RuntimeException(sprintf('Unable to read winter schedule dataset: %s.', $path));
