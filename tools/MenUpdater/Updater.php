@@ -8,33 +8,20 @@ final readonly class Updater
 {
     public function __construct(
         private HttpClient $httpClient,
-        private RssFeedParser $feedParser,
+        private CalendarIndexParser $indexParser,
         private HtmlTextExtractor $htmlTextExtractor,
         private CandidateSelector $candidateSelector,
         private WinterScheduleExtractor $winterScheduleExtractor,
     ) {}
 
-    /** @param non-empty-list<string> $feedUrls */
-    public function run(array $feedUrls, \DateTimeImmutable $since, WinterScheduleDataset $dataset): UpdateResult
+    public function run(\DateTimeImmutable $since, WinterScheduleDataset $dataset): UpdateResult
     {
         $itemsByUrl = [];
-        $warnings = [];
 
-        foreach ($feedUrls as $feedUrl) {
-            $items = $this->feedParser->parse($this->httpClient->get($feedUrl));
-            $oldest = null;
-
-            foreach ($items as $item) {
-                $oldest = $oldest === null || $item->publishedAt < $oldest ? $item->publishedAt : $oldest;
-
-                if ($item->publishedAt > $since) {
-                    $this->assertOfficialArticleUrl($item->url);
-                    $itemsByUrl[$item->url] = $item;
-                }
-            }
-
-            if (count($items) >= 10 && $oldest instanceof \DateTimeImmutable && $oldest > $since) {
-                $warnings[] = sprintf('Feed %s may be truncated: its oldest available item (%s) is newer than the previous successful run.', $feedUrl, $oldest->format(DATE_ATOM));
+        foreach ($this->indexParser->items() as $item) {
+            if ($item->publishedAt > $since) {
+                $this->assertOfficialArticleUrl($item->url);
+                $itemsByUrl[$item->url] = $item;
             }
         }
 
@@ -69,7 +56,7 @@ final readonly class Updater
             $dataset->save();
         }
 
-        return new UpdateResult($since, count($itemsByUrl), $relevantItems, $warnings, $datasetChanged);
+        return new UpdateResult($since, count($itemsByUrl), $relevantItems, [], $datasetChanged);
     }
 
     private function assertOfficialArticleUrl(string $url): void
@@ -78,7 +65,7 @@ final readonly class Updater
         $path = parse_url($url, PHP_URL_PATH);
 
         if ($host !== 'www.gov.pl' || !is_string($path) || !str_starts_with($path, '/web/edukacja/')) {
-            throw new \UnexpectedValueException(sprintf('The feed linked to a non-MEN article: %s.', $url));
+            throw new \UnexpectedValueException(sprintf('The MEN calendar index linked to a non-MEN article: %s.', $url));
         }
     }
 }

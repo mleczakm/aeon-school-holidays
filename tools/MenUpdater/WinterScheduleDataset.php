@@ -37,7 +37,9 @@ final class WinterScheduleDataset
             'periods' => $schedule->periods,
         ];
 
-        if (isset($schedules[$key]) && is_array($schedules[$key]) && ($schedules[$key]['periods'] ?? null) === $schedule->periods) {
+        $existing = is_array($schedules[$key] ?? null) ? $schedules[$key]['periods'] ?? null : null;
+
+        if (is_array($existing) && $this->normalize($existing) === $this->normalize($schedule->periods)) {
             return false;
         }
 
@@ -55,5 +57,28 @@ final class WinterScheduleDataset
         if (file_put_contents($this->path, $json) === false) {
             throw new \RuntimeException(sprintf('Unable to write winter schedule dataset: %s.', $this->path));
         }
+    }
+
+    /**
+     * Sorts each period's voivodeship list so equivalent schedules compare equal
+     * regardless of the order MEN's announcement prose (and thus extraction) lists them in.
+     */
+    private function normalize(mixed $periods): mixed
+    {
+        if (!is_array($periods)) {
+            return $periods;
+        }
+
+        return array_map(static function (mixed $period): mixed {
+            if (!is_array($period) || !is_array($period['voivodeships'] ?? null)) {
+                return $period;
+            }
+
+            $voivodeships = $period['voivodeships'];
+            sort($voivodeships);
+            $period['voivodeships'] = $voivodeships;
+
+            return $period;
+        }, $periods);
     }
 }

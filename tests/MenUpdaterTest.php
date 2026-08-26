@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Mleczakm\AeonSchoolHolidays\Tests;
 
+use Mleczakm\AeonSchoolHolidays\MenUpdater\CalendarIndexParser;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\CandidateSelector;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\FeedItem;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\HtmlTextExtractor;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\HttpClient;
-use Mleczakm\AeonSchoolHolidays\MenUpdater\RssFeedParser;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\Updater;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\WinterScheduleDataset;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\WinterScheduleExtractor;
@@ -17,7 +17,7 @@ use Mleczakm\AeonSchoolHolidays\Voivodeship;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(RssFeedParser::class)]
+#[CoversClass(CalendarIndexParser::class)]
 #[CoversClass(HtmlTextExtractor::class)]
 #[CoversClass(CandidateSelector::class)]
 #[CoversClass(WinterScheduleExtractor::class)]
@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(Updater::class)]
 final class MenUpdaterTest extends TestCase
 {
-    private const string FEED_URL = 'https://feeds.example.test/men.xml';
+    private const string INDEX_URL = 'https://www.gov.pl/web/edukacja/kalendarz-roku-szkolnego';
     private const string SCHEDULE_URL = 'https://www.gov.pl/web/edukacja/terminy-ferii-zimowych-w-roku-szkolnym-20282029';
     private const string REVIEW_URL = 'https://www.gov.pl/web/edukacja/zmiana-organizacji-zajec-szkolnych';
 
@@ -33,12 +33,11 @@ final class MenUpdaterTest extends TestCase
     {
         $datasetPath = $this->temporaryDataset();
         $httpClient = new InMemoryHttpClient([
-            self::FEED_URL => $this->fixture('feed.xml'),
+            self::INDEX_URL => $this->fixture('calendar-index.html'),
             self::SCHEDULE_URL => $this->fixture('winter-schedule.html'),
             self::REVIEW_URL => $this->fixture('review-candidate.html'),
         ]);
         $result = $this->updater($httpClient)->run(
-            [self::FEED_URL],
             new \DateTimeImmutable('2027-06-01T00:00:00Z'),
             new WinterScheduleDataset($datasetPath),
         );
@@ -58,15 +57,15 @@ final class MenUpdaterTest extends TestCase
     {
         $datasetPath = $this->temporaryDataset();
         $httpClient = new InMemoryHttpClient([
-            self::FEED_URL => $this->fixture('feed.xml'),
+            self::INDEX_URL => $this->fixture('calendar-index.html'),
             self::SCHEDULE_URL => $this->fixture('winter-schedule.html'),
             self::REVIEW_URL => $this->fixture('review-candidate.html'),
         ]);
         $updater = $this->updater($httpClient);
         $since = new \DateTimeImmutable('2027-06-01T00:00:00Z');
 
-        $updater->run([self::FEED_URL], $since, new WinterScheduleDataset($datasetPath));
-        $second = $updater->run([self::FEED_URL], $since, new WinterScheduleDataset($datasetPath));
+        $updater->run($since, new WinterScheduleDataset($datasetPath));
+        $second = $updater->run($since, new WinterScheduleDataset($datasetPath));
 
         self::assertFalse($second->datasetChanged);
         self::assertSame(['unchanged', 'review'], array_column($second->relevantItems, 'status'));
@@ -74,14 +73,17 @@ final class MenUpdaterTest extends TestCase
 
     public function testItRejectsNonMenLinksBeforeFetchingThem(): void
     {
-        $feed = str_replace(self::SCHEDULE_URL, 'https://malicious.example.test/article', $this->fixture('feed.xml'));
+        $index = str_replace(
+            '/web/edukacja/terminy-ferii-zimowych-w-roku-szkolnym-20282029',
+            '//malicious.example.test/article',
+            $this->fixture('calendar-index.html'),
+        );
         $datasetPath = $this->temporaryDataset();
 
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage('non-MEN article');
 
-        $this->updater(new InMemoryHttpClient([self::FEED_URL => $feed]))->run(
-            [self::FEED_URL],
+        $this->updater(new InMemoryHttpClient([self::INDEX_URL => $index]))->run(
             new \DateTimeImmutable('2027-06-01T00:00:00Z'),
             new WinterScheduleDataset($datasetPath),
         );
@@ -106,7 +108,7 @@ final class MenUpdaterTest extends TestCase
     {
         return new Updater(
             $httpClient,
-            new RssFeedParser(),
+            new CalendarIndexParser($httpClient),
             new HtmlTextExtractor(),
             new CandidateSelector(),
             new WinterScheduleExtractor(),

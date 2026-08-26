@@ -3,21 +3,18 @@
 
 declare(strict_types=1);
 
+use Mleczakm\AeonSchoolHolidays\MenUpdater\CalendarIndexParser;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\CandidateSelector;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\HtmlTextExtractor;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\NativeHttpClient;
-use Mleczakm\AeonSchoolHolidays\MenUpdater\RssFeedParser;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\Updater;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\WinterScheduleDataset;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\WinterScheduleExtractor;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-$options = getopt('', ['since::', 'feeds::', 'dataset::', 'report::']);
+$options = getopt('', ['since::', 'dataset::', 'report::']);
 $sinceValue = is_string($options['since'] ?? null) ? $options['since'] : '-14 days';
-$feedsValue = is_string($options['feeds'] ?? null)
-    ? $options['feeds']
-    : 'https://rss.mtsz.pl/min-edukacja-wiadomosci.xml,https://rss.mtsz.pl/min-edukacja-komunikaty.xml';
 $datasetPath = is_string($options['dataset'] ?? null)
     ? $options['dataset']
     : dirname(__DIR__) . '/resources/polish-winter-breaks.json';
@@ -32,21 +29,15 @@ try {
     exit(1);
 }
 
-$feedUrls = array_values(array_filter(array_map('trim', explode(',', $feedsValue))));
-
-if ($feedUrls === []) {
-    fwrite(STDERR, "At least one RSS feed URL is required.\n");
-    exit(1);
-}
-
 try {
+    $httpClient = new NativeHttpClient();
     $result = (new Updater(
-        new NativeHttpClient(),
-        new RssFeedParser(),
+        $httpClient,
+        new CalendarIndexParser($httpClient),
         new HtmlTextExtractor(),
         new CandidateSelector(),
         new WinterScheduleExtractor(),
-    ))->run($feedUrls, $since, new WinterScheduleDataset($datasetPath));
+    ))->run($since, new WinterScheduleDataset($datasetPath));
 
     $reportDirectory = dirname($reportPath);
 

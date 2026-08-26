@@ -23,6 +23,7 @@
         "aeon-php/calendar-holidays": "^1.0"
     },
     "require-dev": {
+        "php": "^8.4",
         "ext-dom": "*",
         "friendsofphp/php-cs-fixer": "^3.87",
         "phpstan/phpstan": "^2.1",
