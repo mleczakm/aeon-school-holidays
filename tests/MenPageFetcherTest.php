@@ -7,14 +7,15 @@ namespace Mleczakm\AeonSchoolHolidays\Tests;
 use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\Response;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\MenPageFetcher;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-#[CoversClass(MenPageFetcher::class)]
+/** MenPageFetcher lives in tools/, outside phpunit.xml.dist's <source> scope (src/ only). */
+#[CoversNothing]
 final class MenPageFetcherTest extends TestCase
 {
     public function testItReturnsTheResponseBody(): void

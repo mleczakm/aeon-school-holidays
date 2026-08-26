@@ -18,25 +18,17 @@ use Mleczakm\AeonSchoolHolidays\MenUpdater\WinterScheduleDataset;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\WinterScheduleExtractor;
 use Mleczakm\AeonSchoolHolidays\OfficialWinterBreakSchedule;
 use Mleczakm\AeonSchoolHolidays\Voivodeship;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-#[CoversClass(CalendarIndexParser::class)]
-#[CoversClass(HtmlTextExtractor::class)]
-#[CoversClass(MenPageFetcher::class)]
-#[CoversClass(CandidateSelector::class)]
-#[CoversClass(WinterScheduleExtractor::class)]
-#[CoversClass(WinterScheduleDataset::class)]
-#[CoversClass(Updater::class)]
-#[UsesClass(FeedItem::class)]
-#[UsesClass(WinterSchedule::class)]
-#[UsesClass(UpdateResult::class)]
-#[UsesClass(OfficialWinterBreakSchedule::class)]
-#[UsesClass(Voivodeship::class)]
+/**
+ * Exercises the tools/MenUpdater/* classes, which sit outside phpunit.xml.dist's
+ * <source> scope (src/ only), so none of them are valid #[CoversClass] targets.
+ */
+#[CoversNothing]
 final class MenUpdaterTest extends TestCase
 {
     private const string INDEX_URL = 'https://www.gov.pl/web/edukacja/kalendarz-roku-szkolnego';
