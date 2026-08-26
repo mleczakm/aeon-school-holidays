@@ -29,6 +29,7 @@
         "esi/phpunit-coverage-check": "^3.0",
         "friendsofphp/php-cs-fixer": "^3.87",
         "guzzlehttp/guzzle": "^8.1",
+        "infection/infection": "^0.35",
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^13.0",
         "psr/http-client": "^1.0",
@@ -46,7 +47,10 @@
         }
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
     },
     "scripts": {
         "test": "phpunit",
@@ -56,6 +60,7 @@
         "cs-fix": "php-cs-fixer fix",
         "coverage": "phpunit --coverage-clover=build/coverage/clover.xml --coverage-text",
         "coverage-check": "coverage-check build/coverage/clover.xml 90",
+        "infection": "infection --threads=max --min-msi=80 --min-covered-msi=90",
         "qa": [
             "@cs-check",
             "@phpstan",
