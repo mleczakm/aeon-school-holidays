@@ -1,0 +1,80 @@
+{
+    "schema_version": 1,
+    "country": "PL",
+    "schedules": {
+        "2020": {
+            "source_url": "https://www.gov.pl/web/edukacja/wytyczne-polkolonie-w-szkole",
+            "published_at": "2021-01-03",
+            "periods": [
+                {"start": "2021-01-04", "end": "2021-01-17", "voivodeships": ["PL-02", "PL-04", "PL-06", "PL-08", "PL-10", "PL-12", "PL-14", "PL-16", "PL-18", "PL-20", "PL-22", "PL-24", "PL-26", "PL-28", "PL-30", "PL-32"]}
+            ]
+        },
+        "2021": {
+            "source_url": "https://www.gov.pl/web/edukacja/powrot-uczniow-do-nauki-stacjonarnej-od-10-stycznia-2022-r",
+            "published_at": "2022-01-05",
+            "periods": [
+                {"start": "2022-01-17", "end": "2022-01-30", "voivodeships": ["PL-04", "PL-08", "PL-12", "PL-26", "PL-30"]},
+                {"start": "2022-01-24", "end": "2022-02-06", "voivodeships": ["PL-20", "PL-28"]},
+                {"start": "2022-01-31", "end": "2022-02-13", "voivodeships": ["PL-02", "PL-14", "PL-16", "PL-32"]},
+                {"start": "2022-02-14", "end": "2022-02-27", "voivodeships": ["PL-06", "PL-10", "PL-18", "PL-22", "PL-24"]}
+            ]
+        },
+        "2022": {
+            "source_url": "https://www.gov.pl/web/edukacja/bezpieczne-ferie-zimowe-2023",
+            "published_at": "2023-01-12",
+            "periods": [
+                {"start": "2023-01-16", "end": "2023-01-29", "voivodeships": ["PL-06", "PL-10", "PL-18", "PL-22", "PL-24"]},
+                {"start": "2023-01-23", "end": "2023-02-05", "voivodeships": ["PL-20", "PL-28"]},
+                {"start": "2023-01-30", "end": "2023-02-12", "voivodeships": ["PL-04", "PL-08", "PL-12", "PL-26", "PL-30"]},
+                {"start": "2023-02-13", "end": "2023-02-26", "voivodeships": ["PL-02", "PL-14", "PL-16", "PL-32"]}
+            ]
+        },
+        "2023": {
+            "source_url": "https://www.gov.pl/web/edukacja/terminy-ferii-zimowych-w-roku-szkolnym-20232024",
+            "published_at": "2022-05-06",
+            "periods": [
+                {"start": "2024-01-15", "end": "2024-01-28", "voivodeships": ["PL-02", "PL-14", "PL-16", "PL-32"]},
+                {"start": "2024-01-22", "end": "2024-02-04", "voivodeships": ["PL-20", "PL-28"]},
+                {"start": "2024-01-29", "end": "2024-02-11", "voivodeships": ["PL-06", "PL-10", "PL-18", "PL-22", "PL-24"]},
+                {"start": "2024-02-12", "end": "2024-02-25", "voivodeships": ["PL-04", "PL-08", "PL-12", "PL-26", "PL-30"]}
+            ]
+        },
+        "2024": {
+            "source_url": "https://www.gov.pl/web/edukacja/terminy-ferii-zimowych-w-roku-szkolnym-20242025",
+            "published_at": "2023-06-28",
+            "periods": [
+                {"start": "2025-01-20", "end": "2025-02-02", "voivodeships": ["PL-04", "PL-08", "PL-12", "PL-26", "PL-30"]},
+                {"start": "2025-01-27", "end": "2025-02-09", "voivodeships": ["PL-20", "PL-28"]},
+                {"start": "2025-02-03", "end": "2025-02-16", "voivodeships": ["PL-02", "PL-14", "PL-16", "PL-32"]},
+                {"start": "2025-02-17", "end": "2025-03-02", "voivodeships": ["PL-06", "PL-10", "PL-18", "PL-22", "PL-24"]}
+            ]
+        },
+        "2025": {
+            "source_url": "https://www.gov.pl/web/edukacja/terminy-ferii-zimowych-w-roku-szkolnym-20252026.",
+            "published_at": "2024-06-25",
+            "periods": [
+                {"start": "2026-01-19", "end": "2026-02-01", "voivodeships": ["PL-14", "PL-22", "PL-20", "PL-26", "PL-28"]},
+                {"start": "2026-02-02", "end": "2026-02-15", "voivodeships": ["PL-02", "PL-04", "PL-10", "PL-32", "PL-12", "PL-16"]},
+                {"start": "2026-02-16", "end": "2026-03-01", "voivodeships": ["PL-18", "PL-06", "PL-30", "PL-08", "PL-24"]}
+            ]
+        },
+        "2026": {
+            "source_url": "https://www.gov.pl/web/edukacja/terminy-ferii-zimowych-w-roku-szkolnym-20262027",
+            "published_at": "2025-05-16",
+            "periods": [
+                {"start": "2027-01-18", "end": "2027-01-31", "voivodeships": ["PL-18", "PL-20", "PL-02", "PL-10", "PL-24", "PL-16"]},
+                {"start": "2027-02-01", "end": "2027-02-14", "voivodeships": ["PL-14", "PL-22", "PL-26", "PL-06"]},
+                {"start": "2027-02-15", "end": "2027-02-28", "voivodeships": ["PL-08", "PL-04", "PL-28", "PL-30", "PL-32", "PL-12"]}
+            ]
+        },
+        "2027": {
+            "source_url": "https://www.gov.pl/web/edukacja/terminy-ferii-zimowych-w-roku-szkolnym-20272028",
+            "published_at": "2026-04-02",
+            "periods": [
+                {"start": "2028-01-17", "end": "2028-01-30", "voivodeships": ["PL-20", "PL-04", "PL-26", "PL-30", "PL-32", "PL-08", "PL-22"]},
+                {"start": "2028-01-31", "end": "2028-02-13", "voivodeships": ["PL-14", "PL-28", "PL-10", "PL-18"]},
+                {"start": "2028-02-14", "end": "2028-02-27", "voivodeships": ["PL-16", "PL-06", "PL-12", "PL-24", "PL-02"]}
+            ]
+        }
+    }
+}

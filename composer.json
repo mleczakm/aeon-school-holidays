@@ -1,0 +1,57 @@
+{
+    "name": "mleczakm/aeon-school-holidays",
+    "description": "Polish school holiday calendars for Aeon PHP, including voivodeship-specific winter breaks.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "aeon",
+        "calendar",
+        "holidays",
+        "poland",
+        "school"
+    ],
+    "homepage": "https://github.com/mleczakm/aeon-school-holidays",
+    "authors": [
+        {
+            "name": "Michał Mleczko",
+            "email": "do@mleczki.pl"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "ext-json": "*",
+        "aeon-php/calendar-holidays": "^1.0"
+    },
+    "require-dev": {
+        "ext-dom": "*",
+        "friendsofphp/php-cs-fixer": "^3.87",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^11.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mleczakm\\AeonSchoolHolidays\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mleczakm\\AeonSchoolHolidays\\MenUpdater\\": "tools/MenUpdater/",
+            "Mleczakm\\AeonSchoolHolidays\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "phpunit",
+        "update-men": "php bin/update-men-school-holidays",
+        "phpstan": "phpstan analyse",
+        "cs-check": "php-cs-fixer fix --dry-run --diff",
+        "cs-fix": "php-cs-fixer fix",
+        "qa": [
+            "@cs-check",
+            "@phpstan",
+            "@test"
+        ]
+    }
+}
