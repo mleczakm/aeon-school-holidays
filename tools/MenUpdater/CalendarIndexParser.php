@@ -12,7 +12,7 @@ final readonly class CalendarIndexParser
     private const int PAGE_SIZE = 10;
     private const int MAX_PAGES = 20;
 
-    public function __construct(private HttpClient $httpClient) {}
+    public function __construct(private MenPageFetcher $httpClient) {}
 
     /** @return list<FeedItem> */
     public function items(): array
@@ -72,9 +72,9 @@ final readonly class CalendarIndexParser
             }
 
             $items[] = new FeedItem(
-                trim($link->textContent),
+                trim($link->textContent ?? ''),
                 self::BASE_URL . $href,
-                $this->parseDate(trim($dateElement->textContent)),
+                $this->parseDate(trim($dateElement->textContent ?? '')),
             );
         }
 
@@ -84,7 +84,7 @@ final readonly class CalendarIndexParser
     private function totalPages(\Dom\HTMLDocument $document, int $fallback): int
     {
         $link = $document->querySelector('#js-pagination-pages-count');
-        $text = $link instanceof \Dom\Element ? trim($link->textContent) : '';
+        $text = $link instanceof \Dom\Element ? trim($link->textContent ?? '') : '';
 
         return ctype_digit($text) ? (int) $text : $fallback;
     }

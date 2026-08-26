@@ -21,10 +21,6 @@ The regulation defines the national rules used by `PolishSchoolHolidays`:
 - Spring break is Maundy Thursday through the Tuesday after Easter.
 - Classes end on the first Friday strictly after 20 June; summer holidays start the following day and end on 31 August.
 
-## Szkolny.eu investigation
-
-The [Szkolny.eu Android repository](https://github.com/szkolny-eu/szkolny-android) does not ship or calculate a national school-holiday list. Its profile model stores `dateSemester1Start`, `dateSemester2Start`, and `dateYearEnd`; integrations populate those values from each electronic register where available, with approximate defaults used during profile migration/archiving. That makes the project useful for account-specific school-year boundaries, but not a canonical source for regional Polish holidays.
-
 ## Other datasets
 
 [OpenHolidays API](https://www.openholidaysapi.org/en/) is a useful secondary cross-check and offers Polish school holidays from 2020. This library does not copy its ODbL dataset or call its service at runtime; MEN announcements remain the primary source.

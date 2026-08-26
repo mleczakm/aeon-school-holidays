@@ -25,9 +25,13 @@
     "require-dev": {
         "php": "^8.4",
         "ext-dom": "*",
+        "ext-libxml": "*",
         "friendsofphp/php-cs-fixer": "^3.87",
+        "guzzlehttp/guzzle": "^7.9",
         "phpstan/phpstan": "^2.1",
-        "phpunit/phpunit": "^11.5"
+        "phpunit/phpunit": "^11.5",
+        "psr/http-client": "^1.0",
+        "psr/http-factory": "^1.1"
     },
     "autoload": {
         "psr-4": {

@@ -6,7 +6,7 @@ namespace Mleczakm\AeonSchoolHolidays\MenUpdater;
 
 final class WinterScheduleDataset
 {
-    /** @var array<string, mixed> */
+    /** @var array<array-key, mixed> */
     private array $data;
 
     public function __construct(private readonly string $path)
@@ -28,7 +28,7 @@ final class WinterScheduleDataset
 
     public function apply(WinterSchedule $schedule): bool
     {
-        /** @var array<string, mixed> $schedules */
+        /** @var array<array-key, mixed> $schedules */
         $schedules = $this->data['schedules'];
         $key = (string) $schedule->schoolYearStart;
         $replacement = [
@@ -44,7 +44,7 @@ final class WinterScheduleDataset
         }
 
         $schedules[$key] = $replacement;
-        uksort($schedules, static fn(string $left, string $right): int => (int) $left <=> (int) $right);
+        uksort($schedules, static fn(int|string $left, int|string $right): int => (int) $left <=> (int) $right);
         $this->data['schedules'] = $schedules;
 
         return true;

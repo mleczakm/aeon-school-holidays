@@ -3,10 +3,12 @@
 
 declare(strict_types=1);
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\HttpFactory;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\CalendarIndexParser;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\CandidateSelector;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\HtmlTextExtractor;
-use Mleczakm\AeonSchoolHolidays\MenUpdater\NativeHttpClient;
+use Mleczakm\AeonSchoolHolidays\MenUpdater\MenPageFetcher;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\Updater;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\WinterScheduleDataset;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\WinterScheduleExtractor;
@@ -30,7 +32,7 @@ try {
 }
 
 try {
-    $httpClient = new NativeHttpClient();
+    $httpClient = new MenPageFetcher(new Client(['timeout' => 30]), new HttpFactory());
     $result = (new Updater(
         $httpClient,
         new CalendarIndexParser($httpClient),

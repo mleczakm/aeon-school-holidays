@@ -7,7 +7,7 @@ namespace Mleczakm\AeonSchoolHolidays\MenUpdater;
 final readonly class Updater
 {
     public function __construct(
-        private HttpClient $httpClient,
+        private MenPageFetcher $httpClient,
         private CalendarIndexParser $indexParser,
         private HtmlTextExtractor $htmlTextExtractor,
         private CandidateSelector $candidateSelector,

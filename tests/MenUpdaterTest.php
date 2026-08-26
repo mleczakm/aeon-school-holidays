@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Mleczakm\AeonSchoolHolidays\Tests;
 
+use GuzzleHttp\Psr7\HttpFactory;
+use GuzzleHttp\Psr7\Response;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\CalendarIndexParser;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\CandidateSelector;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\FeedItem;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\HtmlTextExtractor;
-use Mleczakm\AeonSchoolHolidays\MenUpdater\HttpClient;
+use Mleczakm\AeonSchoolHolidays\MenUpdater\MenPageFetcher;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\Updater;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\WinterScheduleDataset;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\WinterScheduleExtractor;
@@ -16,6 +18,9 @@ use Mleczakm\AeonSchoolHolidays\OfficialWinterBreakSchedule;
 use Mleczakm\AeonSchoolHolidays\Voivodeship;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 #[CoversClass(CalendarIndexParser::class)]
 #[CoversClass(HtmlTextExtractor::class)]
@@ -32,7 +37,7 @@ final class MenUpdaterTest extends TestCase
     public function testItUpdatesRecognizedSchedulesAndQueuesOtherRelevantMessagesForReview(): void
     {
         $datasetPath = $this->temporaryDataset();
-        $httpClient = new InMemoryHttpClient([
+        $httpClient = $this->fetcher([
             self::INDEX_URL => $this->fixture('calendar-index.html'),
             self::SCHEDULE_URL => $this->fixture('winter-schedule.html'),
             self::REVIEW_URL => $this->fixture('review-candidate.html'),
@@ -56,7 +61,7 @@ final class MenUpdaterTest extends TestCase
     public function testApplyingTheSameAnnouncementIsIdempotent(): void
     {
         $datasetPath = $this->temporaryDataset();
-        $httpClient = new InMemoryHttpClient([
+        $httpClient = $this->fetcher([
             self::INDEX_URL => $this->fixture('calendar-index.html'),
             self::SCHEDULE_URL => $this->fixture('winter-schedule.html'),
             self::REVIEW_URL => $this->fixture('review-candidate.html'),
@@ -83,7 +88,7 @@ final class MenUpdaterTest extends TestCase
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage('non-MEN article');
 
-        $this->updater(new InMemoryHttpClient([self::INDEX_URL => $index]))->run(
+        $this->updater($this->fetcher([self::INDEX_URL => $index]))->run(
             new \DateTimeImmutable('2027-06-01T00:00:00Z'),
             new WinterScheduleDataset($datasetPath),
         );
@@ -104,7 +109,7 @@ final class MenUpdaterTest extends TestCase
         self::assertSame(['PL-02', 'PL-14', 'PL-16', 'PL-20', 'PL-32'], $schedule->periods[0]['voivodeships']);
     }
 
-    private function updater(HttpClient $httpClient): Updater
+    private function updater(MenPageFetcher $httpClient): Updater
     {
         return new Updater(
             $httpClient,
@@ -113,6 +118,12 @@ final class MenUpdaterTest extends TestCase
             new CandidateSelector(),
             new WinterScheduleExtractor(),
         );
+    }
+
+    /** @param array<string, string> $responses */
+    private function fetcher(array $responses): MenPageFetcher
+    {
+        return new MenPageFetcher(new InMemoryPsr18Client($responses), new HttpFactory());
     }
 
     private function fixture(string $name): string
@@ -134,13 +145,16 @@ final class MenUpdaterTest extends TestCase
 }
 
 /** @internal */
-final readonly class InMemoryHttpClient implements HttpClient
+final readonly class InMemoryPsr18Client implements ClientInterface
 {
     /** @param array<string, string> $responses */
     public function __construct(private array $responses) {}
 
-    public function get(string $url): string
+    public function sendRequest(RequestInterface $request): ResponseInterface
     {
-        return $this->responses[$url] ?? throw new \RuntimeException(sprintf('Unexpected test URL: %s.', $url));
+        $url = (string) $request->getUri();
+        $body = $this->responses[$url] ?? throw new \RuntimeException(sprintf('Unexpected test URL: %s.', $url));
+
+        return new Response(200, [], $body);
     }
 }
