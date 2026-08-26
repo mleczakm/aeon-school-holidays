@@ -12,11 +12,14 @@ use Mleczakm\AeonSchoolHolidays\MenUpdater\FeedItem;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\HtmlTextExtractor;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\MenPageFetcher;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\Updater;
+use Mleczakm\AeonSchoolHolidays\MenUpdater\UpdateResult;
+use Mleczakm\AeonSchoolHolidays\MenUpdater\WinterSchedule;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\WinterScheduleDataset;
 use Mleczakm\AeonSchoolHolidays\MenUpdater\WinterScheduleExtractor;
 use Mleczakm\AeonSchoolHolidays\OfficialWinterBreakSchedule;
 use Mleczakm\AeonSchoolHolidays\Voivodeship;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
@@ -29,6 +32,11 @@ use Psr\Http\Message\ResponseInterface;
 #[CoversClass(WinterScheduleExtractor::class)]
 #[CoversClass(WinterScheduleDataset::class)]
 #[CoversClass(Updater::class)]
+#[UsesClass(FeedItem::class)]
+#[UsesClass(WinterSchedule::class)]
+#[UsesClass(UpdateResult::class)]
+#[UsesClass(OfficialWinterBreakSchedule::class)]
+#[UsesClass(Voivodeship::class)]
 final class MenUpdaterTest extends TestCase
 {
     private const string INDEX_URL = 'https://www.gov.pl/web/edukacja/kalendarz-roku-szkolnego';

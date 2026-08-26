@@ -3,7 +3,9 @@
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/13.2/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          cacheDirectory=".phpunit.cache"
-         colors="true">
+         colors="true"
+         requireCoverageMetadata="true"
+         failOnRisky="true">
     <testsuites>
         <testsuite name="Aeon School Holidays">
             <directory>tests</directory>

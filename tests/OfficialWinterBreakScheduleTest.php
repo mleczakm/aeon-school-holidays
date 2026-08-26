@@ -6,12 +6,16 @@ namespace Mleczakm\AeonSchoolHolidays\Tests;
 
 use Aeon\Calendar\Exception\HolidayYearException;
 use Mleczakm\AeonSchoolHolidays\OfficialWinterBreakSchedule;
+use Mleczakm\AeonSchoolHolidays\SchoolHolidayPeriod;
 use Mleczakm\AeonSchoolHolidays\Voivodeship;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(OfficialWinterBreakSchedule::class)]
+#[UsesClass(Voivodeship::class)]
+#[UsesClass(SchoolHolidayPeriod::class)]
 final class OfficialWinterBreakScheduleTest extends TestCase
 {
     public function testEveryRegionHasExactlyFourteenDaysInEverySupportedSchoolYear(): void

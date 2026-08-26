@@ -8,13 +8,19 @@ use Aeon\Calendar\Exception\HolidayYearException;
 use Aeon\Calendar\Gregorian\DateTime;
 use Aeon\Calendar\Gregorian\Day;
 use Aeon\Calendar\Gregorian\TimePeriod;
+use Mleczakm\AeonSchoolHolidays\OfficialWinterBreakSchedule;
 use Mleczakm\AeonSchoolHolidays\PolishSchoolHolidays;
+use Mleczakm\AeonSchoolHolidays\SchoolHolidayPeriod;
 use Mleczakm\AeonSchoolHolidays\Voivodeship;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(PolishSchoolHolidays::class)]
+#[UsesClass(Voivodeship::class)]
+#[UsesClass(OfficialWinterBreakSchedule::class)]
+#[UsesClass(SchoolHolidayPeriod::class)]
 final class PolishSchoolHolidaysTest extends TestCase
 {
     public function testWinterBreakDependsOnTheVoivodeship(): void
