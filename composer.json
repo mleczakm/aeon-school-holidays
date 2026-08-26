@@ -27,9 +27,9 @@
         "ext-dom": "*",
         "ext-libxml": "*",
         "friendsofphp/php-cs-fixer": "^3.87",
-        "guzzlehttp/guzzle": "^7.9",
+        "guzzlehttp/guzzle": "^8.1",
         "phpstan/phpstan": "^2.1",
-        "phpunit/phpunit": "^11.5",
+        "phpunit/phpunit": "^13.0",
         "psr/http-client": "^1.0",
         "psr/http-factory": "^1.1"
     },
