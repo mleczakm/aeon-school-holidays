@@ -91,6 +91,10 @@ composer install
 composer qa
 ```
 
+### Releases
+
+Versioning and releases are automated by [semantic-release](https://github.com/semantic-release/semantic-release): every push to `main` that passes CI is analyzed, and a new version, GitHub release, and [CHANGELOG.md](CHANGELOG.md) entry are cut automatically when warranted. This depends on [Conventional Commits](https://www.conventionalcommits.org/) - commit subjects need a `feat:`, `fix:`, `perf:`, etc. prefix to be considered; `feat:` bumps the minor version, `fix:`/`perf:` bump the patch version, and a `BREAKING CHANGE:` footer (or `!` after the type) bumps the major version. Other types (`build:`, `chore:`, `ci:`, `docs:`, `refactor:`, `style:`, `test:`) are recorded in history but don't trigger a release on their own.
+
 ## License
 
 MIT
